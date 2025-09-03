@@ -105,7 +105,7 @@ public class BerkeleyServer {
                 System.out.printf("[MASTER]  - %s delta=%d ms%n", clientHandler, delta);
             } catch (IOException e) {
                 System.out.println("[MASTER]  - Removendo cliente desconectado: " + clientHandler);
-                clientsIterator.remove();
+                clients.remove(clientHandler);
                 clientHandler.closeQuietly();
             }
         }
@@ -149,7 +149,5 @@ public class BerkeleyServer {
 
         BerkeleyServer server = new BerkeleyServer(port, interval, timeout, initialOffset);
         server.start();
-
-        Thread.currentThread().join();
     }
 }

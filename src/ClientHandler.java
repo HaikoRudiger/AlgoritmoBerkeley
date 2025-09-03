@@ -5,6 +5,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ClientHandler implements Runnable {
     private final Socket socket;
@@ -14,8 +15,8 @@ public class ClientHandler implements Runnable {
 
     ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
-        this.out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+        this.out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
     }
 
     String getId() {
@@ -25,7 +26,6 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            // Espera HELLO <id>
             String hello = in.readLine();
             if (hello == null || !hello.startsWith("HELLO ")) {
                 throw new IOException("Handshake inválido: " + hello);

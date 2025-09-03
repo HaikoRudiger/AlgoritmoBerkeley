@@ -32,7 +32,6 @@ public class BerkeleyServer {
         serverSocket.setReuseAddress(true);
 
         prepareThreadForClientConnections(serverSocket);
-        serverSocket.close();
 
         scheduleSynchronization();
 

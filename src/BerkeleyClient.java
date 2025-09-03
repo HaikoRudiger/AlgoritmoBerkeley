@@ -1,13 +1,6 @@
 import java.io.*;
 import java.net.*;
-import java.text.DecimalFormat;
 
-/**
- * Cliente (slave) do algoritmo de Berkeley.
- * - Conecta, envia "HELLO <id>"
- * - Responde "OFFSET <delta>" quando recebe "TIME_REQUEST <serverTime>"
- * - Aplica "ADJUST <x>" quando recebido
- */
 public class BerkeleyClient {
 
     private final String host;
@@ -28,18 +21,16 @@ public class BerkeleyClient {
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
              PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true)) {
 
-            socket.setSoTimeout(0); // bloqueante; servidor dirige o ciclo
+            socket.setSoTimeout(0);
 
-            // Handshake
             out.println("HELLO " + clientId);
 
-            // Loop de protocolo
             String line;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("TIME_REQUEST ")) {
                     long serverTime = Long.parseLong(line.substring("TIME_REQUEST ".length()).trim());
                     long myTime = clock.now();
-                    long delta = myTime - serverTime; // diferença cliente - server (como no enunciado)
+                    long delta = myTime - serverTime;
                     out.println("OFFSET " + delta);
                     System.out.printf("[CLIENT %s] Solicitação recebida. Meu tempo=%s, delta=%+d ms%n",
                             clientId, clock.prettyNow(), delta);
@@ -50,12 +41,6 @@ public class BerkeleyClient {
                     System.out.printf("[CLIENT %s] Ajuste aplicado: %+d ms | nova hora=%s | offset=%+d ms%n",
                             clientId, adjust, clock.prettyNow(), clock.getOffset());
 
-                } else if (line.startsWith("BYE")) {
-                    System.out.println("[CLIENT " + clientId + "] Encerrado pelo servidor.");
-                    break;
-
-                } else {
-                    System.out.println("[CLIENT " + clientId + "] Mensagem desconhecida: " + line);
                 }
             }
         }

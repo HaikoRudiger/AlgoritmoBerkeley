@@ -1,3 +1,3 @@
 # AlgoritmoBerkeley
 
-Pedro Scarelli, Caio Abraao, Haiko Rudiger e
+Pedro Scarelli, Caio Abraao, Haiko Rudiger e Beatriz Moresco Joaquim.
